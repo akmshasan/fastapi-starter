@@ -2,8 +2,9 @@ version: "3.8"
 
 services:
   app:
-    build:
-      context: .
+    # build:
+    #   context: .
+    image: akmshasan/fastapi-starter:latest
     restart: unless-stopped
     container_name: app
     ports:

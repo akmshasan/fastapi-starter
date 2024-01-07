@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  # push:
+  #   branches:
+  #     - "main"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  unit-testing:
+    runs-on: ubuntu-latest 
+    
+    steps:
+    - name : Checkout code
+      uses : actions/checkout@v4
+
+    - name: Setup Python
+      uses : actions/setup-python@v4
+      with:
+        python-version: '3.11'
+      
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+        pip install -r requirements.txt
+        pip install -r requirements-test.txt
+
+    - name: Formating and linting
+      run: |
+        black .
+        isort ./api
+        autoflake --in-place -r ./api
+      continue-on-error: true
+      
+    - name : Run tests 
+      run : pytest ./tests/tests.py
+
+    - name: Run coverage
+      run : coverage run -m pytest ./tests/tests.py
+
+    - name: Publish Coverage Report
+      run : coverage report -m

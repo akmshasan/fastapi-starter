@@ -49,10 +49,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
         pip install -r requirements.txt
+        pip install -r requirements-test.txt
 
     - name: Formating with black
       run: |
         black .
+        isort ./api
+        autoflake --in-place -r ./api
       continue-on-error: true
       
     - name : Run tests 

@@ -1,8 +1,8 @@
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
-from prometheus_fastapi_instrumentator import Instrumentator
 
 from api.database.database import Base, engine
 from api.handlers.routers import router
@@ -33,8 +33,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    """Creates table in the database
-    """
+    """Creates table in the database"""
     Base.metadata.create_all(bind=engine)
 
 
@@ -67,8 +66,11 @@ async def health() -> DetailResponse:
     """
     return DetailResponse(message=f"Health OK")
 
+
 # Prometheus Instrumentator
-Instrumentator().instrument(app=app).expose(app=app, endpoint="/metrics", tags=["Default"])
+Instrumentator().instrument(app=app).expose(
+    app=app, endpoint="/metrics", tags=["Default"]
+)
 
 # Custom Logging Middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)

@@ -51,7 +51,7 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-test.txt
 
-    - name: Formating with black
+    - name: Formating and linting
       run: |
         black .
         isort ./api

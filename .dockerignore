@@ -1,0 +1,7 @@
+# Ignore everything
+**
+
+# Except below:
+!api
+!requirements.txt
+!fruits.db

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -13,5 +15,5 @@ class FruitCreate(BaseModel):
 
 
 class FruitUpdate(BaseModel):
-    fruit: str = "Enter updated fruit name"
-    color: str = "Enter updated color"
+    fruit: Optional[str] = None
+    color: Optional[str] = None

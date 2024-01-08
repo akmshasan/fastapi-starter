@@ -67,7 +67,7 @@ def test_add_fruit():
     assert "id" in data
 
 
-def test_get_fruit_by_id():
+def test_get_fruit():
     # Create an item
     response = client.post(
         url=f"/api/v1/fruits", json={"fruit": "Apple", "color": "Red"}

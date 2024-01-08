@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -8,6 +10,14 @@ from api.database.database import Base, engine
 from api.handlers.routers import router
 from api.schemas.responses import DetailResponse
 from api.utils.middleware import log_middleware
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Creates table in the database"""
+    Base.metadata.create_all(bind=engine)
+    yield
+
 
 # Initialize a FastAPI instance
 app = FastAPI(
@@ -22,19 +32,14 @@ app = FastAPI(
     This API does the following CRUD Operations:
     ============================================
     C -> Adds a fruit in the basket.
-    R -> Reteives all fruits from the basket or specific fruit by ID
+    R -> Retrieves all fruits from the basket or specific fruit by ID
     U -> Updates fruit name or color for a specific fruit by ID
     D -> Deletes a fruit from the basket by ID
 
     """,
     version="0.1.0",
+    lifespan=lifespan,
 )
-
-
-@app.on_event("startup")
-async def startup():
-    """Creates table in the database"""
-    Base.metadata.create_all(bind=engine)
 
 
 @app.get(
@@ -74,6 +79,14 @@ Instrumentator().instrument(app=app).expose(
 
 # Custom Logging Middleware
 app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
+# CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Handlers/Routers
 app.include_router(router=router)

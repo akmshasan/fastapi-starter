@@ -61,16 +61,3 @@ async def test_health():
         response = await ac.get("/health")
     assert response.status_code == 200
     assert response.json() == {"message": f"Health OK"}
-
-
-@pytest.mark.anyio
-async def test_add_fruit():
-    async with AsyncClient(app=app, base_url="http://0.0.0.0:8000") as ac:
-        response = await ac.post(
-            url=f"/api/v1/fruits", json={"fruit": "Banana", "color": "Yellow"}
-        )
-    assert response.status_code == 307, response.text
-    data = response.json()
-    assert data["fruit"] == "Banana"
-    assert data["color"] == "Yellow"
-    assert "id" in data

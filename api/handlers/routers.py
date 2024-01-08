@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from api.database.database import get_db
-from api.database.models import DBFruit
 from api.handlers.abstraction import create, get_all, get_by_id, delete, update
 from api.schemas.schemas import Fruit, FruitCreate, FruitUpdate
 

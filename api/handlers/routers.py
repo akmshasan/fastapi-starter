@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from api.database.database import get_db
-from api.handlers.abstraction import create, get_all, get_by_id, delete, update
+from api.handlers.abstraction import create, delete, get_all, get_by_id, update
 from api.schemas.schemas import Fruit, FruitCreate, FruitUpdate
 
 router = APIRouter(prefix="/api/v1/fruits", tags=["Fruits"])

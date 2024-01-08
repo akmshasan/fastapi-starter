@@ -1,6 +1,5 @@
 import pytest
 from httpx import AsyncClient
-from fastapi.testclient import TestClient
 from sqlalchemy import StaticPool, create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -15,8 +14,6 @@ engine = create_engine(
     poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# client = TestClient(app=app)
 
 
 def override_get_db():

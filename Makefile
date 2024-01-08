@@ -1,5 +1,7 @@
 fmt:
 	black .
+	isort ./api
+	autoflake --in-place -r ./api
 
 test:
 	pytest tests/tests.py

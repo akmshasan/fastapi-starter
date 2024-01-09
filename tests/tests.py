@@ -61,27 +61,25 @@ def test_add_fruit():
         url=f"/api/v1/fruits", json={"fruit": "Banana", "color": "Yellow"}
     )
     assert response.status_code == 201, response.text
-    data = response.json()
-    assert data["fruit"] == "Banana"
-    assert data["color"] == "Yellow"
-    assert "id" in data
+    assert response.json() == {"message": f"New fruit has been added in the basket"}
 
 
 def test_get_fruit():
-    # Create an item
-    response = client.post(
-        url=f"/api/v1/fruits", json={"fruit": "Apple", "color": "Red"}
-    )
-    assert response.status_code == 201, response.text
-    data = response.json()
-    fruit_id = data["id"]
-
-    response = client.get(url=f"/api/v1/fruits/{fruit_id}")
+    response = client.get(url=f"/api/v1/fruits/100")
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["fruit"] == "Apple"
     assert data["color"] == "Red"
-    assert data["id"] == fruit_id
+    assert data["id"] == 100
+
+
+def test_get_fruits():
+    response = client.get(url=f"/api/v1/fruits")
+    assert response.status_code == 200, response.text
+    assert response.json() == [
+        {"id": 100, "fruit": "Apple", "color": "Red"},
+        {"id": 101, "fruit": "Banana", "color": "Yellow"},
+    ]
 
 
 def test_update_fruit():
@@ -91,18 +89,18 @@ def test_update_fruit():
         json={"fruit": "Newfruit", "color": "Newcolor"},
     )
     assert response.status_code == 202, response.text
-    data = response.json()
-    assert data["fruit"] == "Newfruit"
-    assert data["color"] == "Newcolor"
-    assert data["id"] == fruit_id
+    assert response.json() == {
+        "message": f"Fruit having fruit id: {fruit_id} has been updated"
+    }
 
 
 def test_delete_fruit():
     fruit_id = 100
     response = client.delete(url=f"/api/v1/fruits/{fruit_id}")
     assert response.status_code == 202, response.text
-    data = response.json()
-    assert data["id"] == fruit_id
-    # # Try to get the deleted item
-    # response_new = client.get(url=f"/api/v1/fruits/{fruit_id}")
-    # assert response_new.status_code == 404, response.text
+    assert response.json() == {
+        "message": f"Fruit having fruit id: {fruit_id} has been deleted"
+    }
+    # Try to get the deleted item
+    response_new = client.get(url=f"/api/v1/fruits/{fruit_id}")
+    assert response_new.status_code == 404, response.text

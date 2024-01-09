@@ -14,7 +14,9 @@ router = APIRouter(prefix="/api/v1/fruits", tags=["Fruits"])
     status_code=201,
     response_model=DetailResponse,
 )
-async def add_fruit(fruit: FruitCreate, db: Session = Depends(get_db)) -> DetailResponse:
+async def add_fruit(
+    fruit: FruitCreate, db: Session = Depends(get_db)
+) -> DetailResponse:
     db_fruit: Fruit = create(db=db, fruit=fruit)
     return DetailResponse(message=f"New fruit has been added in the basket")
 

@@ -8,9 +8,6 @@ test:
 	coverage run -m pytest tests/tests.py
 	coverage report -m
 
-# build:
-# 	docker-compose --build
-
 up:
 	docker-compose down -v
 	docker-compose up

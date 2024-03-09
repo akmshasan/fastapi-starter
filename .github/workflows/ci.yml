@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    needs: [ unit-testing, container-scan ]
+    needs: [ container-scan ]
     
     steps:
       -
@@ -73,6 +73,7 @@ jobs:
 
   container-scan:
     runs-on: ubuntu-latest
+    needs: [ unit-testing ]
     
     steps:
     - name : Checkout code
